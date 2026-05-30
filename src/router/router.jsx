@@ -1,13 +1,22 @@
 import { createBrowserRouter } from "react-router-dom";
+
 import Layout from "../layouts/Layout";
+import AuthenticationLayout from "../layouts/AuthenticationLayout";
+
 import Homepage from "../views/Homepage";
-import routes from "./routes";
-import { getAllGamesLoader } from "./loaders";
 import SearchPage from "../views/SearchPage";
-import { getSearchedGames } from "./loaders";
 import GenrePage from "../views/GenrePage";
-import { getFilteredByGenreGames } from "./loaders";
-import { getAllGenres } from "./loaders";
+import RegisterPage from "../views/auth/RegisterPage";
+import LoginPage from "../views/auth/LoginPage";
+
+import routes from "./routes";
+
+import {
+  getAllGamesLoader,
+  getSearchedGames,
+  getFilteredByGenreGames,
+  getAllGenres,
+} from "./loaders";
 
 const router = createBrowserRouter([
   {
@@ -23,13 +32,26 @@ const router = createBrowserRouter([
       {
         path: routes.search,
         Component: SearchPage,
-        loader: getSearchedGames
+        loader: getSearchedGames,
       },
       {
         path: routes.genre,
         Component: GenrePage,
-        loader: getFilteredByGenreGames
-      }
+        loader: getFilteredByGenreGames,
+      },
+    ],
+  },
+  {
+    Component: AuthenticationLayout,
+    children: [
+      {
+        path: routes.register,
+        Component: RegisterPage,
+      },
+      {
+        path: routes.login,
+        Component: LoginPage,
+      },
     ],
   },
 ]);

@@ -1,39 +1,59 @@
 export async function getAllGamesLoader() {
-  const promise = await fetch(
-    `https://api.rawg.io/api/games?key=${import.meta.env.VITE_API_KEY}&dates=2024-01-01,2024-12-30&page_size=20`
-  );
+  try {
+    const promise = await fetch(
+      `https://api.rawg.io/api/games?key=${import.meta.env.VITE_API_KEY}&dates=2024-01-01,2024-12-30&page_size=20`
+    );
 
-  const json = await promise.json();
+    const json = await promise.json();
 
-  return json;
+    return json;
+  } catch (error) {
+    console.log("ERRORE GAMES:", error);
+    return { results: [] };
+  }
 }
 
 export async function getSearchedGames({ params }) {
-  const promise = await fetch(
-    `https://api.rawg.io/api/games?key=${import.meta.env.VITE_API_KEY}&search=${params.slug}&page_size=20`
-  );
+  try {
+    const promise = await fetch(
+      `https://api.rawg.io/api/games?key=${import.meta.env.VITE_API_KEY}&search=${params.slug}&page_size=20`
+    );
 
-  const json = await promise.json();
+    const json = await promise.json();
 
-  return json;
+    return json;
+  } catch (error) {
+    console.log("ERRORE SEARCH:", error);
+    return { results: [] };
+  }
 }
 
 export async function getAllGenres() {
-  const promise = await fetch(
-    `https://api.rawg.io/api/genres?key=${import.meta.env.VITE_API_KEY}`
-  );
+  try {
+    const promise = await fetch(
+      `https://api.rawg.io/api/genres?key=${import.meta.env.VITE_API_KEY}`
+    );
 
-  const json = await promise.json();
+    const json = await promise.json();
 
-  return json.results;
+    return json.results;
+  } catch (error) {
+    console.log("ERRORE GENERI:", error);
+    return [];
+  }
 }
 
 export async function getFilteredByGenreGames({ params }) {
-  const promise = await fetch(
-    `https://api.rawg.io/api/games?key=${import.meta.env.VITE_API_KEY}&genres=${params.slug}`
-  );
+  try {
+    const promise = await fetch(
+      `https://api.rawg.io/api/games?key=${import.meta.env.VITE_API_KEY}&genres=${params.slug}`
+    );
 
-  const json = await promise.json();
+    const json = await promise.json();
 
-  return json.results;
+    return json.results;
+  } catch (error) {
+    console.log("ERRORE GAMES PER GENERE:", error);
+    return [];
+  }
 }
