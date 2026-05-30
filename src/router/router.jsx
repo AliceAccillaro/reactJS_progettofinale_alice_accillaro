@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
-import Layout from "../components/Layout";
+import Layout from "../layouts/Layout";
 import Homepage from "../views/Homepage";
 import routes from "./routes";
 import { getAllGamesLoader } from "./loaders";
