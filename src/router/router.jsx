@@ -8,6 +8,8 @@ import SearchPage from "../views/SearchPage";
 import GenrePage from "../views/GenrePage";
 import RegisterPage from "../views/auth/RegisterPage";
 import LoginPage from "../views/auth/LoginPage";
+import ProfilePage from "../views/auth/ProfilePage";
+import ProfileSettingsPage from "../views/auth/ProfileSettingsPage";
 
 import routes from "./routes";
 
@@ -52,6 +54,14 @@ const router = createBrowserRouter([
         path: routes.login,
         Component: LoginPage,
       },
+      {
+        path: routes.profile,
+        Component: ProfilePage,
+      },
+      {
+        path: routes.profile_settings,
+        Component: ProfileSettingsPage,
+      }
     ],
   },
 ]);

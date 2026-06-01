@@ -30,6 +30,11 @@ export default function Navbar() {
         >
           Rehacktor
         </Link>
+        <Link          to={routes.profile}
+          className="btn btn-ghost text-lg font-medium"
+        >
+          Profilo
+        </Link>
       </div>
 
       <div className="flex gap-3 mr-10 items-center">

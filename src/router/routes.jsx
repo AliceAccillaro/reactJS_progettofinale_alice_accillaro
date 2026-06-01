@@ -4,6 +4,8 @@ const routes = {
   genre: "/genre/:slug",
   register: "/register",
   login: "/login",
+  profile: "/profile",
+  profile_settings: "/auth/profile/settings",
 };
 
 export default routes;
