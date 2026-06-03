@@ -1,37 +1,59 @@
 export default function Header({ game }) {
+  const platforms = game.platforms
+    ?.slice(0, 4)
+    .map(({ platform }) => platform.name)
+    .join(", ");
+  const rating =
+    typeof game.rating === "number" ? `${game.rating.toFixed(1)}/5` : "N/A";
+
   return (
-    <header className="pt-10 text-nav-gray">
-      <h1 className="text-center text-5xl font-electro mb-2 font-bold">
-        {game.name}
-      </h1>
+    <header className="detail-grid">
+      <article className="panel">
+        <p className="eyebrow">Game dossier</p>
+        <h1 className="page-title">{game.name}</h1>
+        <p className="detail-copy">{game.description_raw}</p>
 
-      <h2 className="text-center text-2xl font-electro">
-        Released on: <span className="font-bold">{game.released}</span>
-      </h2>
+        <div className="tag-row">
+          {game.genres.map((genre) => {
+            return (
+              <span className="genre-tag" key={genre.id}>
+                {genre.name}
+              </span>
+            );
+          })}
+        </div>
+      </article>
 
-      <section className="grid grid-cols-2 gap-4 mt-10">
-        <article className="px-10">
-          <p>{game.description_raw}</p>
-        </article>
+      <aside className="detail-aside">
+        <div className="info-card">
+          <div className="info-card__row">
+            <p className="info-label">Release</p>
+            <p className="info-value">{game.released ?? "TBA"}</p>
+          </div>
 
-        <article className="text-center">
-          <p className="text-xl mb-5">
-            <span className="font-bold">Rating:</span> {game.rating}
-          </p>
+          <div className="info-card__row">
+            <p className="info-label">Rating</p>
+            <p className="info-value">{rating}</p>
+          </div>
 
-          <p className="text-xl font-bold">Genres:</p>
+          <div className="info-card__row">
+            <p className="info-label">Metacritic</p>
+            <p className="info-value">{game.metacritic ?? "N/A"}</p>
+          </div>
 
-          <ul className="flex justify-center">
-            {game.genres.map((genre) => {
-              return (
-                <li className="mx-3" key={genre.id}>
-                  {genre.name}
-                </li>
-              );
-            })}
-          </ul>
-        </article>
-      </section>
+          <div className="info-card__row">
+            <p className="info-label">Platforms</p>
+            <p className="info-value">{platforms ?? "Not available"}</p>
+          </div>
+        </div>
+
+        <div className="media-frame">
+          <img
+            src={game.background_image_additional ?? game.background_image}
+            alt={game.name}
+          />
+        </div>
+      </aside>
     </header>
   );
 }

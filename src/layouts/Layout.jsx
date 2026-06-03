@@ -8,22 +8,20 @@ export default function Layout() {
   const genres = useLoaderData();
 
   return (
-    <>
+    <div className="app-shell">
       <Navbar />
 
-      <section className="grid grid-cols-7 gap-4">
-
+      <section className="content-shell">
         <div>
           <Sidebar genres={genres} />
         </div>
 
-        <div className="col-span-6">
+        <div className="page-slot">
           <Outlet />
         </div>
-
       </section>
 
       <Footer />
-    </>
+    </div>
   );
 }

@@ -3,17 +3,27 @@ import { Link, useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 
 import routes from "../../router/routes";
-import { UserContext } from "../../context/UserContext";
+import { UserContext } from "../../context/userContext";
 
 export default function Navbar() {
   const [slug, setSlug] = useState("");
-
   const navigate = useNavigate();
-
   const { user, profile, signOut } = useContext(UserContext);
 
   const handleChange = (e) => {
     setSlug(e.target.value);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+
+    const value = slug.trim();
+
+    if (!value) {
+      return;
+    }
+
+    navigate(`/search/${value}`);
   };
 
   const handleLogout = async () => {
@@ -22,66 +32,88 @@ export default function Navbar() {
   };
 
   return (
-    <div className="navbar bg-base-200 px-8 shadow-sm">
-      <div className="flex-1">
-        <Link
-          to={routes.home}
-          className="btn btn-ghost text-3xl font-electro"
-        >
-          Rehacktor
-        </Link>
-        <Link          to={routes.profile}
-          className="btn btn-ghost text-lg font-medium"
-        >
-          Profilo
-        </Link>
-      </div>
+    <div className="topbar-wrap">
+      <nav className="topbar">
+        <div className="brand-lockup">
+          <Link to={routes.home} className="brand-mark">
+            R
+          </Link>
 
-      <div className="flex gap-3 mr-10 items-center">
-        {!user ? (
-          <>
+          <div>
             <Link
-              to={routes.login}
-              className="btn btn-ghost text-lg font-medium px-5"
+              to={routes.home}
+              className="brand-title"
             >
-              Login
+              Rehacktor
             </Link>
 
-            <Link
-              to={routes.register}
-              className="btn btn-ghost text-lg font-medium px-5"
-            >
-              Register
+            <p className="brand-subtitle">
+              Arcade archive for curious players
+            </p>
+          </div>
+        </div>
+
+        <div className="nav-cluster">
+          <div className="nav-links">
+            <Link to={routes.home} className="nav-link">
+              Discover
             </Link>
-          </>
-        ) : (
-          <>
-            <span className="text-lg font-medium">
-              Benvenuto {profile?.first_name}
-            </span>
+
+            <Link to={routes.profile} className="nav-link">
+              Profilo
+            </Link>
+
+            {!user ? (
+              <>
+                <Link to={routes.login} className="nav-link">
+                  Login
+                </Link>
+
+                <Link
+                  to={routes.register}
+                  className="nav-link nav-link--primary"
+                >
+                  Register
+                </Link>
+              </>
+            ) : (
+              <>
+                <span className="welcome-pill">
+                  <span className="welcome-pill__label">Profilo attivo</span>
+                  <span className="welcome-pill__name">
+                    {profile?.first_name ?? "Player"}
+                  </span>
+                </span>
+
+                <button
+                  onClick={handleLogout}
+                  className="nav-link nav-link--danger"
+                >
+                  Logout
+                </button>
+              </>
+            )}
+          </div>
+
+          <form className="search-form" onSubmit={handleSearch}>
+            <input
+              type="text"
+              placeholder="Cerca un gioco, un brand, un mood..."
+              className="search-input"
+              onChange={handleChange}
+              value={slug}
+            />
 
             <button
-              onClick={handleLogout}
-              className="btn btn-ghost text-lg font-medium px-5"
+              type="submit"
+              className="search-submit"
+              aria-label="Search games"
             >
-              Logout
+              <FaSearch />
             </button>
-          </>
-        )}
-      </div>
-
-      <div className="flex gap-2">
-        <input
-          type="text"
-          placeholder="Search"
-          className="input input-bordered"
-          onChange={handleChange}
-        />
-
-        <Link className="btn btn-square" to={`/search/${slug}`}>
-          <FaSearch />
-        </Link>
-      </div>
+          </form>
+        </div>
+      </nav>
     </div>
   );
 }

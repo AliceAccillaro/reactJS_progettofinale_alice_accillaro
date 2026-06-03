@@ -13,17 +13,8 @@ export default function BodySection({ game, profile_id }) {
     setDescription(e.target.value);
   };
 
-  const get_reviews = async () => {
-    let { data: reviews, error } = await supabase
-      .from("reviews")
-      .select("*")
-      .eq("game_id", game.id);
-
-    setGameReviews(reviews);
-  };
-
   const add_review = async () => {
-    const { data, error } = await supabase
+    await supabase
       .from("reviews")
       .insert([
         {
@@ -36,21 +27,11 @@ export default function BodySection({ game, profile_id }) {
       .select();
 
     setDescription("");
-    setCheckReview(!checkReview);
-  };
-
-  const get_favourite = async () => {
-    let { data: favourites, error } = await supabase
-      .from("favourites")
-      .select("*")
-      .eq("profile_id", profile_id)
-      .eq("game_id", game.id);
-
-    if (favourites.length > 0) setIsFavourite(true);
+    setCheckReview((currentValue) => !currentValue);
   };
 
   const add_game = async () => {
-    const { data, error } = await supabase
+    await supabase
       .from("favourites")
       .insert([{ profile_id, game_id: game.id, game_name: game.name }])
       .select();
@@ -59,7 +40,7 @@ export default function BodySection({ game, profile_id }) {
   };
 
   const remove_game = async () => {
-    const { error } = await supabase
+    await supabase
       .from("favourites")
       .delete()
       .eq("profile_id", profile_id)
@@ -69,52 +50,99 @@ export default function BodySection({ game, profile_id }) {
   };
 
   useEffect(() => {
-    get_favourite();
-    get_reviews();
-  }, [checkReview]);
+    let isMounted = true;
+
+    const syncGameData = async () => {
+      const { data: favourites } = await supabase
+        .from("favourites")
+        .select("*")
+        .eq("profile_id", profile_id)
+        .eq("game_id", game.id);
+
+      if (isMounted) {
+        setIsFavourite((favourites ?? []).length > 0);
+      }
+
+      const { data: reviews } = await supabase
+        .from("reviews")
+        .select("*")
+        .eq("game_id", game.id);
+
+      if (isMounted) {
+        setGameReviews(reviews ?? []);
+      }
+    };
+
+    syncGameData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [checkReview, game.id, profile_id]);
 
   return (
-    <section className="grid grid-cols-6 mt-10 px-10">
-      <div className="col-span-5 flex flex-col items-center">
-        <p className="text-white text-xl mb-5">Reviews</p>
+    <section className="detail-lower-grid">
+      <div className="panel">
+        <p className="eyebrow">Community tools</p>
+        <h2 className="section-title">Lascia il tuo segnale</h2>
+        <p className="page-subtitle">
+          Salva il gioco nella tua collezione e pubblica una recensione rapida.
+        </p>
 
-        <textarea
-          className="textarea w-1/2 mb-3"
-          placeholder="Type your review"
-          onChange={handle_description}
-          value={description}
-        ></textarea>
-
-        <button className="btn bg-nav-gray w-1/2" onClick={add_review}>
-          Send
+        <button
+          type="button"
+          className={`favorite-toggle ${isFavourite ? "is-active" : ""}`}
+          onClick={isFavourite ? remove_game : add_game}
+        >
+          {isFavourite ? <FaHeart /> : <FaRegHeart />}
+          {isFavourite ? "Gia nei preferiti" : "Aggiungi ai preferiti"}
         </button>
 
-        <div className="border border-nav-gray h-[200px] w-2/3 my-3 overflow-auto text-white">
-          {gameReviews.map((review) => {
-            return (
-              <p
-                key={review.id}
-                className="text-end my-3 mx-2 p-2 border border-white"
-              >
-                {review.description}
-              </p>
-            );
-          })}
-        </div>
+        <label className="field-label" htmlFor="review-field">
+          Review
+        </label>
+        <textarea
+          id="review-field"
+          className="field text-area"
+          placeholder="Scrivi la tua impressione sul gioco..."
+          onChange={handle_description}
+          value={description}
+        />
+
+        <button
+          className="accent-button"
+          onClick={add_review}
+          disabled={!description.trim()}
+        >
+          Pubblica recensione
+        </button>
       </div>
 
-      <div>
-        {isFavourite ? (
-          <FaHeart
-            className="text-red-500 cursor-pointer text-3xl"
-            onClick={remove_game}
-          />
-        ) : (
-          <FaRegHeart
-            className="text-red-500 cursor-pointer text-3xl"
-            onClick={add_game}
-          />
-        )}
+      <div className="panel">
+        <div className="reviews-head">
+          <div>
+            <p className="eyebrow">Live feed</p>
+            <h2 className="section-title">Recensioni del gioco</h2>
+          </div>
+
+          <span className="stat-chip">{gameReviews.length} feedback</span>
+        </div>
+
+        <div className="reviews-list">
+          {gameReviews.length ? (
+            gameReviews.map((review) => {
+              return (
+                <article key={review.id} className="review-card">
+                  <p>{review.description}</p>
+                </article>
+              );
+            })
+          ) : (
+            <div className="empty-state">
+              Nessuna recensione ancora. La prima potrebbe essere la tua.
+            </div>
+          )}
+        </div>
       </div>
     </section>
   );

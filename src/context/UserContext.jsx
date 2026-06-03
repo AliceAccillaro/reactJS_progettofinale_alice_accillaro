@@ -1,7 +1,6 @@
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import supabase from "../database/supabase";
-
-export const UserContext = createContext();
+import { UserContext } from "./userContext";
 
 export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -29,7 +28,40 @@ export function UserContextProvider({ children }) {
   };
 
   useEffect(() => {
-    getUser();
+    let isMounted = true;
+
+    const syncSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!isMounted) {
+        return;
+      }
+
+      if (!session) {
+        setUser(null);
+        setProfile(null);
+        return;
+      }
+
+      setUser(session.user);
+
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select()
+        .eq("id", session.user.id);
+
+      if (isMounted) {
+        setProfile(profiles?.[0] ?? null);
+      }
+    };
+
+    syncSession();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const signOut = async () => {

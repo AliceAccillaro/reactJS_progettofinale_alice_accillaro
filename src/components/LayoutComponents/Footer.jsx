@@ -4,46 +4,48 @@ import { IoMdContact } from "react-icons/io";
 
 export default function Footer() {
   return (
-    <footer className="bg-base-200 mt-10">
-
-      <div className="flex justify-center items-center gap-10 py-5 border-b border-gray-400">
-
-        <div className="flex flex-col text-sm">
-          <a href="#" className="hover:underline">
-            Privacy info
-          </a>
-
-          <a href="#" className="hover:underline">
-            Contact Us
-          </a>
+    <footer className="footer-shell">
+      <div className="footer-panel">
+        <div>
+          <p className="eyebrow">Rehacktor</p>
+          <h2 className="section-title">Un archivio gaming con piu personalita.</h2>
+          <p className="page-subtitle">
+            Catalogo, profili, preferiti e recensioni dentro un'interfaccia da control room.
+          </p>
+          <p className="footer-meta">
+            (c) 2026 Rehacktor. Crafted for players who like to dig deeper.
+          </p>
         </div>
 
-        <div className="flex gap-6 text-xl">
-
-          <a href="#">
-            <FaDiscord />
-          </a>
-
-          <a href="#">
-            <FaInstagram />
-          </a>
-
-          <a href="#">
+        <div className="footer-links">
+          <a href="#" className="footer-link">
             <MdOutlinePrivacyTip />
+            Privacy
           </a>
 
-          <a href="#">
-            <FaXTwitter />
+          <a href="#" className="footer-link">
+            <IoMdContact />
+            Contact
           </a>
-
         </div>
 
-      </div>
+        <div className="social-links">
+          <a href="#" className="social-link">
+            <FaDiscord />
+            Discord
+          </a>
 
-      <div className="text-center text-sm py-2">
-        @copyright: Myself
-      </div>
+          <a href="#" className="social-link">
+            <FaInstagram />
+            Instagram
+          </a>
 
+          <a href="#" className="social-link">
+            <FaXTwitter />
+            X / Twitter
+          </a>
+        </div>
+      </div>
     </footer>
   );
 }

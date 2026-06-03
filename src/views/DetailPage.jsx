@@ -3,7 +3,7 @@ import Header from "../components/DetailComponents/Header";
 import { FaCircleArrowLeft } from "react-icons/fa6";
 import BodySection from "../components/DetailComponents/BodySection";
 import { useContext } from "react";
-import { UserContext } from "../context/UserContext";
+import { UserContext } from "../context/userContext";
 
 export default function DetailPage() {
   const game = useLoaderData();
@@ -11,27 +11,37 @@ export default function DetailPage() {
   const { profile } = useContext(UserContext);
 
   return (
-    <>
-      <main
-        style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url(${game.background_image})`,
-        }}
-        className="min-h-screen bg-center bg-cover bg-fixed"
+    <main
+      style={{
+        backgroundImage: `linear-gradient(rgba(4, 11, 20, 0.88), rgba(4, 11, 20, 0.92)), url(${game.background_image})`,
+      }}
+      className="detail-shell"
+    >
+      <button
+        type="button"
+        className="ghost-button back-button"
+        onClick={() => navigate(-1)}
       >
-        <FaCircleArrowLeft
-          className="text-3xl fixed bottom-6 text-white left-6 cursor-pointer"
-          onClick={() => navigate(-1)}
+        <FaCircleArrowLeft />
+        Torna al catalogo
+      </button>
+
+      <Header game={game} />
+
+      {profile ? (
+        <BodySection
+          game={game}
+          profile_id={profile.id}
         />
-
-        <Header game={game} />
-
-        {profile && (
-          <BodySection
-            game={game}
-            profile_id={profile.id}
-          />
-        )}
-      </main>
-    </>
+      ) : (
+        <section className="panel">
+          <p className="eyebrow">Community access</p>
+          <h2 className="section-title">Accedi per salvare questo gioco e scrivere una recensione.</h2>
+          <p className="page-subtitle">
+            La scheda resta navigabile da ospite, ma le funzioni community si sbloccano dopo il login.
+          </p>
+        </section>
+      )}
+    </main>
   );
 }

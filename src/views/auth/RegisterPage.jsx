@@ -1,8 +1,9 @@
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import { UserContext } from "../../context/UserContext";
+import { UserContext } from "../../context/userContext";
+import routes from "../../router/routes";
 
 export default function RegisterPage() {
   const {
@@ -32,94 +33,140 @@ export default function RegisterPage() {
   };
 
   return (
-    <main className="h-screen flex justify-center items-center">
-      <form
-        className="p-10 bg-nav-gray w-1/2"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <input
-          type="text"
-          placeholder="Name"
-          className="input input-lg mb-5 w-full"
-          {...register("first_name", {
-            required: "This field is required",
-          })}
-        />
-
-        {errors.first_name && (
-          <p role="alert" className="text-red-500 mb-6">
-            {errors.first_name.message}
+    <main className="auth-shell">
+      <section className="auth-card">
+        <article className="auth-showcase">
+          <p className="eyebrow">New player</p>
+          <h1 className="form-title">Crea il tuo spazio dentro Rehacktor.</h1>
+          <p className="form-subtitle">
+            Il nuovo design funziona meglio quando ogni profilo ha una presenza chiara, personale e pronta a collezionare giochi.
           </p>
-        )}
+          <ul className="showcase-list">
+            <li>Configura nome, username e accesso in pochi secondi</li>
+            <li>Prepara il profilo per avatar, preferiti e recensioni</li>
+            <li>Entra subito nella parte community del sito</li>
+          </ul>
+        </article>
 
-        <input
-          type="text"
-          placeholder="Last Name"
-          className="input input-lg mb-5 w-full"
-          {...register("last_name", {
-            required: "This field is required",
-          })}
-        />
-
-        {errors.last_name && (
-          <p role="alert" className="text-red-500 mb-6">
-            {errors.last_name.message}
+        <form className="form-panel" onSubmit={handleSubmit(onSubmit)}>
+          <p className="eyebrow">Register</p>
+          <h2 className="form-title">Apri un nuovo account</h2>
+          <p className="form-subtitle">
+            Compila i campi qui sotto per attivare la tua identita nel catalogo.
           </p>
-        )}
 
-        <input
-          type="text"
-          placeholder="Username"
-          className="input input-lg mb-5 w-full"
-          {...register("username", {
-            required: "This field is required",
-          })}
-        />
+          <label className="field-label" htmlFor="register-name">
+            Nome
+          </label>
+          <input
+            id="register-name"
+            type="text"
+            placeholder="Nome"
+            className="field"
+            {...register("first_name", {
+              required: "This field is required",
+            })}
+          />
 
-        {errors.username && (
-          <p role="alert" className="text-red-500 mb-6">
-            {errors.username.message}
+          {errors.first_name && (
+            <p role="alert" className="field-error">
+              {errors.first_name.message}
+            </p>
+          )}
+
+          <label className="field-label" htmlFor="register-lastname">
+            Cognome
+          </label>
+          <input
+            id="register-lastname"
+            type="text"
+            placeholder="Cognome"
+            className="field"
+            {...register("last_name", {
+              required: "This field is required",
+            })}
+          />
+
+          {errors.last_name && (
+            <p role="alert" className="field-error">
+              {errors.last_name.message}
+            </p>
+          )}
+
+          <label className="field-label" htmlFor="register-username">
+            Username
+          </label>
+          <input
+            id="register-username"
+            type="text"
+            placeholder="Username"
+            className="field"
+            {...register("username", {
+              required: "This field is required",
+            })}
+          />
+
+          {errors.username && (
+            <p role="alert" className="field-error">
+              {errors.username.message}
+            </p>
+          )}
+
+          <label className="field-label" htmlFor="register-email">
+            Email
+          </label>
+          <input
+            id="register-email"
+            type="email"
+            placeholder="you@example.com"
+            className="field"
+            {...register("email", {
+              required: "This field is required",
+            })}
+          />
+
+          {errors.email && (
+            <p role="alert" className="field-error">
+              {errors.email.message}
+            </p>
+          )}
+
+          <label className="field-label" htmlFor="register-password">
+            Password
+          </label>
+          <input
+            id="register-password"
+            type="password"
+            placeholder="Minimo 8 caratteri"
+            className="field"
+            {...register("password", {
+              required: "This field is required",
+              minLength: {
+                value: 8,
+                message: "Password must be at least 8 characters",
+              },
+            })}
+          />
+
+          {errors.password && (
+            <p role="alert" className="field-error">
+              {errors.password.message}
+            </p>
+          )}
+
+          <button className="accent-button" type="submit">
+            Crea account
+          </button>
+
+          <p className="form-footnote">
+            Hai gia un account?{" "}
+            <Link to={routes.login} className="inline-link">
+              Vai al login
+            </Link>
+            .
           </p>
-        )}
-
-        <input
-          type="email"
-          placeholder="Email"
-          className="input input-lg mb-5 w-full"
-          {...register("email", {
-            required: "This field is required",
-          })}
-        />
-
-        {errors.email && (
-          <p role="alert" className="text-red-500 mb-6">
-            {errors.email.message}
-          </p>
-        )}
-
-        <input
-          type="password"
-          placeholder="Password"
-          className="input input-lg mb-5 w-full"
-          {...register("password", {
-            required: "This field is required",
-            minLength: {
-              value: 8,
-              message: "Password must be at least 8 characters",
-            },
-          })}
-        />
-
-        {errors.password && (
-          <p role="alert" className="text-red-500 mb-6">
-            {errors.password.message}
-          </p>
-        )}
-
-        <button className="btn btn-neutral p-5">
-          Sign in
-        </button>
-      </form>
+        </form>
+      </section>
     </main>
   );
 }
