@@ -1,12 +1,14 @@
+import { Link } from "react-router-dom";
+
 export default function GameCard({ game }) {
   return (
-    <>
-      <div className="h-[200px] relative">
+    <Link to={`/detail/${game.id}`}>
+      <div className="h-[200px] relative cursor-pointer">
 
         <img
           src={game.background_image}
           className="w-full h-full brightness-50 object-cover"
-          alt=""
+          alt={game.name}
         />
 
         <p className="absolute bottom-0 w-full text-center text-white">
@@ -14,6 +16,6 @@ export default function GameCard({ game }) {
         </p>
 
       </div>
-    </>
+    </Link>
   );
 }

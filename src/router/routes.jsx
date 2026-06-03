@@ -6,6 +6,7 @@ const routes = {
   login: "/login",
   profile: "/profile",
   profile_settings: "/auth/profile/settings",
+  detail: "/detail/:id",
 };
 
 export default routes;

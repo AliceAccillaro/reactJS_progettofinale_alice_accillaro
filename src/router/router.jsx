@@ -10,6 +10,8 @@ import RegisterPage from "../views/auth/RegisterPage";
 import LoginPage from "../views/auth/LoginPage";
 import ProfilePage from "../views/auth/ProfilePage";
 import ProfileSettingsPage from "../views/auth/ProfileSettingsPage";
+import DetailPage from "../views/DetailPage";
+import { getGameDetails } from "./loaders";
 
 import routes from "./routes";
 
@@ -40,6 +42,11 @@ const router = createBrowserRouter([
         path: routes.genre,
         Component: GenrePage,
         loader: getFilteredByGenreGames,
+      },
+      {
+        path: routes.detail,
+        Component: DetailPage,
+        loader: getGameDetails,
       },
     ],
   },
